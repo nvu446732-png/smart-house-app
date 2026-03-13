@@ -15,20 +15,21 @@
     <link rel="apple-touch-icon" href="icon-192.png">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --text-primary: #f8fafc;
+            --bg-color: #050b14;
+            --card-bg: rgba(16, 25, 43, 0.65);
+            --card-border: rgba(56, 189, 248, 0.15);
+            --text-primary: #e2e8f0;
             --text-secondary: #94a3b8;
-            --accent-blue: #3b82f6;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --accent-yellow: #f59e0b;
+            --accent-blue: #38bdf8;
+            --accent-green: #34d399;
+            --accent-red: #f87171;
+            --accent-yellow: #fbbf24;
+            --neon-glow: 0 0 15px;
         }
 
         body {
@@ -37,8 +38,11 @@
             padding: 0;
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
+                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(52, 211, 153, 0.08), transparent 25%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
@@ -52,13 +56,22 @@
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
             margin: 0;
-            background: linear-gradient(to right, #60a5fa, #34d399);
+            background: linear-gradient(to right, #38bdf8, #34d399);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 10px rgba(56, 189, 248, 0.2), 0 0 20px rgba(56, 189, 248, 0.2); }
+            to { text-shadow: 0 0 15px rgba(56, 189, 248, 0.6), 0 0 30px rgba(52, 211, 153, 0.6); }
         }
 
         .connection-box {
@@ -96,16 +109,24 @@
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background-color: var(--accent-red);
-            transition: background-color 0.3s ease;
+            box-shadow: var(--neon-glow) var(--accent-red);
+            transition: all 0.3s ease;
         }
         
         .status-dot.connected {
             background-color: var(--accent-green);
-            box-shadow: 0 0 10px var(--accent-green);
+            box-shadow: 0 0 15px var(--accent-green), 0 0 30px var(--accent-green);
+            animation: dotPulse 2s infinite;
+        }
+
+        @keyframes dotPulse {
+            0% { box-shadow: 0 0 10px var(--accent-green); }
+            50% { box-shadow: 0 0 25px var(--accent-green), 0 0 40px var(--accent-green); }
+            100% { box-shadow: 0 0 10px var(--accent-green); }
         }
 
         .dashboard {
@@ -125,18 +146,33 @@
             border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 2rem;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .card:hover::before {
+            left: 150%;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.2);
+            border-color: rgba(56, 189, 248, 0.4);
         }
 
         .card-header {
@@ -162,19 +198,25 @@
             font-weight: 500;
             color: var(--text-secondary);
             margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .card-value {
-            font-size: 3rem;
+            font-size: 3.5rem;
+            font-family: 'Orbitron', monospace;
             font-weight: 700;
             margin: 0;
             display: flex;
             align-items: baseline;
             gap: 8px;
+            color: var(--text-primary);
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
 
         .card-unit {
             font-size: 1.25rem;
+            font-family: 'Outfit', sans-serif;
             font-weight: 500;
             color: var(--text-secondary);
         }
@@ -251,21 +293,56 @@
         /* Progress Circle for Temp/Humidity */
         .progress-bar {
             width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
             margin-top: 1.5rem;
             overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+            position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            border-radius: 3px;
-            transition: width 0.5s ease;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated stripes */
+        .progress-fill::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.2) 75%,
+                transparent 75%,
+                transparent
+            );
+            z-index: 1;
+            background-size: 20px 20px;
+            animation: moveStripes 1s linear infinite;
         }
 
-        .temp-fill { background: linear-gradient(90deg, #f59e0b, #ef4444); }
-        .hum-fill { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        @keyframes moveStripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+
+        .temp-fill { 
+            background: linear-gradient(90deg, #f59e0b, #ef4444); 
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+        .hum-fill { 
+            background: linear-gradient(90deg, #38bdf8, #3b82f6); 
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
         
         .error-message {
             color: var(--accent-red);
@@ -278,49 +355,70 @@
         /* Nút Điều Khiển */
         .control-group {
             display: flex;
-            gap: 8px;
-            margin-top: 8px;
+            gap: 10px;
+            margin-top: 10px;
             width: 100%;
         }
 
         .control-btn {
             flex: 1;
-            padding: 8px 0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            background: rgba(0, 0, 0, 0.3);
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2));
             color: var(--text-secondary);
-            font-family: inherit;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .control-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 2px;
+            background: transparent;
+            transition: 0.3s;
+            z-index: -1;
         }
 
         .control-btn:hover {
             background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transform: translateY(-2px);
         }
 
         .control-btn.active-on {
-            background: rgba(16, 185, 129, 0.8);
-            border-color: rgba(16, 185, 129, 1);
-            color: white;
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+            background: rgba(52, 211, 153, 0.15);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            box-shadow: inset 0 0 15px rgba(52, 211, 153, 0.2), 0 0 15px rgba(52, 211, 153, 0.4);
+            text-shadow: 0 0 8px var(--accent-green);
         }
+        .control-btn.active-on::after { background: var(--accent-green); height: 100%; opacity: 0.2; }
 
         .control-btn.active-off {
-            background: rgba(239, 68, 68, 0.8);
-            border-color: rgba(239, 68, 68, 1);
-            color: white;
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+            background: rgba(248, 113, 113, 0.15);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+            box-shadow: inset 0 0 15px rgba(248, 113, 113, 0.2), 0 0 15px rgba(248, 113, 113, 0.4);
+            text-shadow: 0 0 8px var(--accent-red);
         }
+        .control-btn.active-off::after { background: var(--accent-red); height: 100%; opacity: 0.2;}
 
         .control-btn.active-auto {
-            background: rgba(59, 130, 246, 0.8);
-            border-color: rgba(59, 130, 246, 1);
-            color: white;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.2), 0 0 15px rgba(56, 189, 248, 0.4);
+            text-shadow: 0 0 8px var(--accent-blue);
         }
+        .control-btn.active-auto::after { background: var(--accent-blue); height: 100%; opacity: 0.2;}
 
     </style>
 </head>
@@ -522,22 +620,31 @@
             const ip = ipInput.value.trim();
             if (!ip) return;
             try {
-                // Send form data logic
                 const params = new URLSearchParams();
                 params.append('device', device);
                 params.append('state', state);
 
-                await fetch(`http://${ip}/api/control`, {
+                const response = await fetch(`http://${ip}/api/control`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: params
+                    body: params,
+                    signal: AbortSignal.timeout(5000)
                 });
+
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}`);
+                }
 
                 // Tăng tốc độ load lại sau khi vừa bấm nút (trải nghiệm mượt)
                 fetchData();
             } catch (error) {
-                console.error("Lỗi điều khiển thiết bị", error);
-                errorMessage.textContent = "Lỗi đường truyền lệnh đến ESP32!";
+                console.error("Lỗi điều khiển thiết bị:", error);
+                errorMessage.textContent = `Lỗi lệnh: ${error.message}. Kiểm tra ESP32!`;
+                
+                // Hiển thị gợi ý nếu là lỗi CORS hoặc Network
+                if (error.name === 'TypeError') {
+                    errorMessage.textContent = "Lỗi kết nối (CORS/Network). Hãy nạp mã mới nhất cho ESP32!";
+                }
             }
         }
 
